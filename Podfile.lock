@@ -1,0 +1,34 @@
+PODS:
+  - Alamofire (4.7.0)
+  - Himotoki (3.1.0)
+  - RxCocoa (4.1.2):
+    - RxSwift (~> 4.0)
+  - RxOptional (3.3.0):
+    - RxCocoa (~> 4.0)
+    - RxSwift (~> 4.0)
+  - RxSwift (4.1.2)
+  - Swinject (2.2.0)
+  - SwinjectStoryboard (1.1.2):
+    - Swinject (~> 2.1)
+
+DEPENDENCIES:
+  - Alamofire
+  - Himotoki
+  - RxCocoa
+  - RxOptional
+  - RxSwift
+  - Swinject
+  - SwinjectStoryboard
+
+SPEC CHECKSUMS:
+  Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
+  Himotoki: b09643fa5456d49bda43d0fb4e30dfa79e37f72f
+  RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
+  RxOptional: e5448d3e21024489e07c31f6a262f2b50c975367
+  RxSwift: e49536837d9901277638493ea537394d4b55f570
+  Swinject: 4ca48bca7de5f398229a26abe1ac902b9f3ee541
+  SwinjectStoryboard: 92e75763c3299cdf627bef98a5180dc894864336
+
+PODFILE CHECKSUM: 7b4032ee057b1552bc74f62f61d281fc9801e100
+
+COCOAPODS: 1.4.0
