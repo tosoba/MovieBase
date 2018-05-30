@@ -37,7 +37,13 @@ class PopularViewController: UIViewController {
             .controlEvent(.valueChanged)
             .asDriver()
         
-        let input = PopularViewModel.Input(loadTrigger: Driver.merge(viewWillAppear, pull), cellWasSelected: moviesCollectionView.rx.itemSelected.asDriver())
+        let isNearBottomEdge = moviesCollectionView.rx.didScroll.asDriver().filter { [weak self] _ in
+            guard let strongSelf = self else { return false }
+            return strongSelf.moviesCollectionView.isNearBottomEdge() && strongSelf.moviesCollectionView.numberOfItems(inSection: 0) > 0
+        }.mapToVoid()
+
+        let input = PopularViewModel.Input(loadTrigger: Driver.merge(viewWillAppear, pull, isNearBottomEdge),
+                                           cellWasSelected: moviesCollectionView.rx.itemSelected.asDriver())
         
         let output = viewModel.transform(input: input)
         
@@ -45,9 +51,16 @@ class PopularViewController: UIViewController {
             .drive(moviesCollectionView.refreshControl!.rx.isRefreshing)
             .disposed(by: disposeBag)
         
-        output.movies.drive(moviesCollectionView.rx.items(cellIdentifier: "popularMovieCell", cellType: PopularCollectionViewCell.self)) { _, viewModel, cell in
-            cell.viewModel = viewModel
-        }.disposed(by: disposeBag)
+        output.movies.asDriver()
+            .drive(moviesCollectionView.rx.items(cellIdentifier: "popularMovieCell", cellType: PopularCollectionViewCell.self)) { _, viewModel, cell in
+                cell.viewModel = viewModel
+            }.disposed(by: disposeBag)
+    }
+}
+
+extension UIScrollView {
+    func isNearBottomEdge(edgeOffset: CGFloat = 20.0) -> Bool {
+        return self.contentOffset.y + self.frame.size.height + edgeOffset > self.contentSize.height
     }
 }
 

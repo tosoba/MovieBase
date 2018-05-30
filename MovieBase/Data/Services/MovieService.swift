@@ -13,18 +13,22 @@ fileprivate let baseURL = "https://api.themoviedb.org/3/"
 let basePosterURL = "https://image.tmdb.org/t/p/w342"
 
 enum MovieDb {
-    case popular
+    case popular(page: Int?)
     
     var url: String {
         switch self {
-        case .popular:
-            return "\(baseURL)movie/popular?api_key=\(movieDbAPIKey)"
+        case .popular(let page):
+            if page == nil {
+                return "\(baseURL)movie/popular?api_key=\(movieDbAPIKey)"
+            } else {
+                return "\(baseURL)movie/popular?api_key=\(movieDbAPIKey)&language=en-US&page=\(page!)"
+            }
         }
     }
 }
 
 protocol MovieServicing {
-    func getPopular() -> Observable<MovieSearch>
+    func getPopular(fromPage page: Int?) -> Observable<MovieSearch>
 }
 
 class MovieService: MovieServicing {
@@ -34,8 +38,8 @@ class MovieService: MovieServicing {
         self.network = network
     }
     
-    func getPopular() -> Observable<MovieSearch> {
-        let url = MovieDb.popular.url
+    func getPopular(fromPage page: Int? = nil) -> Observable<MovieSearch> {
+        let url = MovieDb.popular(page: page).url
         return network.request(method: .get, url: url, parameters: nil, type: MovieSearch.self)
     }
 }
