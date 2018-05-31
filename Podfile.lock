@@ -1,7 +1,12 @@
 PODS:
   - Alamofire (4.7.0)
+  - Differentiator (3.0.2)
   - Himotoki (3.1.0)
   - RxCocoa (4.1.2):
+    - RxSwift (~> 4.0)
+  - RxDataSources (3.0.2):
+    - Differentiator (~> 3.0)
+    - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
   - RxOptional (3.3.0):
     - RxCocoa (~> 4.0)
@@ -15,6 +20,7 @@ DEPENDENCIES:
   - Alamofire
   - Himotoki
   - RxCocoa
+  - RxDataSources (~> 3.0)
   - RxOptional
   - RxSwift
   - Swinject
@@ -22,13 +28,15 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
+  Differentiator: a87be69eba49ec4ab460c7671143ee3a9eececfd
   Himotoki: b09643fa5456d49bda43d0fb4e30dfa79e37f72f
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
+  RxDataSources: cb7c31e652a87ebb919da45f716bbb87b3765f6b
   RxOptional: e5448d3e21024489e07c31f6a262f2b50c975367
   RxSwift: e49536837d9901277638493ea537394d4b55f570
   Swinject: 4ca48bca7de5f398229a26abe1ac902b9f3ee541
   SwinjectStoryboard: 92e75763c3299cdf627bef98a5180dc894864336
 
-PODFILE CHECKSUM: 7b4032ee057b1552bc74f62f61d281fc9801e100
+PODFILE CHECKSUM: 22cddf59534dcd2b9a9522c30d568a826d3f7b55
 
 COCOAPODS: 1.4.0

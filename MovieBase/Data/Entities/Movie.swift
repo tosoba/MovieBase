@@ -7,6 +7,7 @@
 //
 
 import Himotoki
+import RxDataSources
 
 struct Movie {
     let posterPath: String?
@@ -40,4 +41,18 @@ extension Movie: Himotoki.Decodable {
             voteAverage: e <| "vote_average"
         )
     }
+}
+
+extension Movie: Equatable {
+    static func ==(lhs: Movie, rhs: Movie) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+extension Movie: IdentifiableType {
+    var identity: Int {
+        return id
+    }
+    
+    typealias Identity = Int
 }

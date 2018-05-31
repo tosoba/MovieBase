@@ -17,6 +17,7 @@ target 'MovieBase' do
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'RxOptional'
+  pod 'RxDataSources', '~> 3.0'
 
 end
 

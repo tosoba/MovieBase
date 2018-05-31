@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 class PopularViewController: UIViewController {
     
@@ -37,13 +38,20 @@ class PopularViewController: UIViewController {
             .controlEvent(.valueChanged)
             .asDriver()
         
-        let isNearBottomEdge = moviesCollectionView.rx.didScroll.asDriver().filter { [weak self] _ in
-            guard let strongSelf = self else { return false }
-            return strongSelf.moviesCollectionView.isNearBottomEdge() && strongSelf.moviesCollectionView.numberOfItems(inSection: 0) > 0
-        }.mapToVoid()
-
+        let isNearBottomEdge = moviesCollectionView.rx.didScroll.asDriver()
+            .filter { [weak self] _ in
+                guard let strongSelf = self else { return false }
+                return strongSelf.moviesCollectionView.isNearBottomEdge() && strongSelf.moviesCollectionView.numberOfItems(inSection: 0) > 0
+            }.mapToVoid()
+    
         let input = PopularViewModel.Input(loadTrigger: Driver.merge(viewWillAppear, pull, isNearBottomEdge),
                                            cellWasSelected: moviesCollectionView.rx.itemSelected.asDriver())
+    
+        let moviesDataSource = RxCollectionViewSectionedAnimatedDataSource<MovieSectionModel>(configureCell: { ds, cv, ip, item in
+            let cell = cv.dequeueReusableCell(withReuseIdentifier: "popularMovieCell", for: ip) as! PopularCollectionViewCell
+            cell.viewModel = PopularCellViewModel(network: Network(), imageUrl: "\(basePosterURL)\(item.posterPath ?? "")", title: item.originalTitle)
+            return cell
+        }, configureSupplementaryView: { _, _, _, _ in return UICollectionReusableView()})
         
         let output = viewModel.transform(input: input)
         
@@ -51,10 +59,28 @@ class PopularViewController: UIViewController {
             .drive(moviesCollectionView.refreshControl!.rx.isRefreshing)
             .disposed(by: disposeBag)
         
-        output.movies.asDriver()
-            .drive(moviesCollectionView.rx.items(cellIdentifier: "popularMovieCell", cellType: PopularCollectionViewCell.self)) { _, viewModel, cell in
-                cell.viewModel = viewModel
-            }.disposed(by: disposeBag)
+        output.movies.asObservable().bind(to: moviesCollectionView.rx.items(dataSource: moviesDataSource))
+            .disposed(by: disposeBag)
+    }
+}
+
+struct MovieSectionModel {
+    var data: [Movie]
+}
+
+extension MovieSectionModel: AnimatableSectionModelType {
+    var items: [Movie] {
+        return data
+    }
+    
+    typealias Item = Movie
+    typealias Identity = String
+    
+    var identity: Identity { return "" }
+    
+    init(original: MovieSectionModel, items: [Movie]) {
+        self = original
+        data = items
     }
 }
 
@@ -63,4 +89,3 @@ extension UIScrollView {
         return self.contentOffset.y + self.frame.size.height + edgeOffset > self.contentSize.height
     }
 }
-
