@@ -37,16 +37,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 )
             }
             
+            container.register(SearchViewModel.self) { r in
+                SearchViewModel(
+                    network: r.resolve(Networking.self)!,
+                    movieService: r.resolve(MovieServicing.self)!
+                )
+            }
+            
             // Views
             container.storyboardInitCompleted(UITabBarController.self) { _, _ in }
             container.storyboardInitCompleted(UINavigationController.self) { _, _ in }
             
             container.storyboardInitCompleted(SearchViewController.self) { r, c in
+                c.viewModel = r.resolve(SearchViewModel.self)
+                c.network = r.resolve(Networking.self)!
             }
             
             container.storyboardInitCompleted(FavouritesViewController.self) { r, c in }
             container.storyboardInitCompleted(PopularViewController.self) { r, c in
                 c.viewModel = r.resolve(PopularViewModel.self)
+                c.network = r.resolve(Networking.self)!
             }
         }
         Container.loggingFunction = nil

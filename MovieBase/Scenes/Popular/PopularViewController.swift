@@ -16,6 +16,8 @@ class PopularViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     var viewModel: PopularViewModel!
+    
+    var network: Networking!
 
     @IBOutlet weak var moviesCollectionView: UICollectionView!
     
@@ -47,9 +49,9 @@ class PopularViewController: UIViewController {
         let input = PopularViewModel.Input(loadTrigger: Driver.merge(viewWillAppear, pull, isNearBottomEdge),
                                            cellWasSelected: moviesCollectionView.rx.itemSelected.asDriver())
     
-        let moviesDataSource = RxCollectionViewSectionedAnimatedDataSource<MovieSectionModel>(configureCell: { ds, cv, ip, item in
+        let moviesDataSource = RxCollectionViewSectionedAnimatedDataSource<MovieSectionModel>(configureCell: { [weak self] ds, cv, ip, item in
             let cell = cv.dequeueReusableCell(withReuseIdentifier: "popularMovieCell", for: ip) as! PopularCollectionViewCell
-            cell.viewModel = PopularCellViewModel(network: Network(), imageUrl: "\(basePosterURL)\(item.posterPath ?? "")", title: item.originalTitle)
+            cell.viewModel = PopularCellViewModel(network: self?.network ?? Network(), imageUrl: "\(basePosterURL)\(item.posterPath ?? "")", title: item.originalTitle)
             return cell
         }, configureSupplementaryView: { _, _, _, _ in return UICollectionReusableView()})
         
@@ -64,28 +66,4 @@ class PopularViewController: UIViewController {
     }
 }
 
-struct MovieSectionModel {
-    var data: [Movie]
-}
 
-extension MovieSectionModel: AnimatableSectionModelType {
-    var items: [Movie] {
-        return data
-    }
-    
-    typealias Item = Movie
-    typealias Identity = String
-    
-    var identity: Identity { return "" }
-    
-    init(original: MovieSectionModel, items: [Movie]) {
-        self = original
-        data = items
-    }
-}
-
-extension UIScrollView {
-    func isNearBottomEdge(edgeOffset: CGFloat = 20.0) -> Bool {
-        return self.contentOffset.y + self.frame.size.height + edgeOffset > self.contentSize.height
-    }
-}

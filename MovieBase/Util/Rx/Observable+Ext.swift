@@ -32,4 +32,10 @@ extension ObservableType {
     func mapToVoid() -> Observable<Void> {
         return map { _ in }
     }
+    
+    func trackWithAsDriver(activityIndicator: ActivityIndicator, errorTracker: ErrorTracker) -> Driver<E> {
+        return self.trackActivity(activityIndicator)
+            .trackError(errorTracker)
+            .asDriverOnErrorJustComplete()
+    }
 }

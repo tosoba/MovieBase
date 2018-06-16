@@ -23,7 +23,7 @@ final class PopularViewModel: ViewModel {
     
     private let network: Networking
     private let movieService: MovieServicing
-    
+
     private let disposeBag = DisposeBag()
     
     init(network: Networking, movieService: MovieServicing) {
@@ -41,9 +41,7 @@ final class PopularViewModel: ViewModel {
         
         let newMovies = input.loadTrigger.flatMapLatest { [weak self] _ in
             return self?.movieService.getPopular(fromPage: self?.currentPage ?? 1)
-                .trackActivity(activityIndicator)
-                .trackError(errorTracker)
-                .asDriverOnErrorJustComplete()
+                .trackWithAsDriver(activityIndicator: activityIndicator, errorTracker: errorTracker)
                 .map({ movieSearch -> [Movie] in
                     self?.totalPages = movieSearch.totalPages
                     self?.currentPage += 1
