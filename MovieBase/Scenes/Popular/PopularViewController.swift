@@ -13,9 +13,12 @@ import RxDataSources
 
 class PopularViewController: UIViewController {
     
+    private static let showMovieSegueId = "ShowPopularMovieSegue"
+    
     private let disposeBag = DisposeBag()
     
     var viewModel: PopularViewModel!
+    private var currentMovieViewModel: MovieViewModel?
     
     var network: Networking!
 
@@ -63,6 +66,20 @@ class PopularViewController: UIViewController {
         
         output.movies.asObservable().bind(to: moviesCollectionView.rx.items(dataSource: moviesDataSource))
             .disposed(by: disposeBag)
+        
+        output.showMovie.subscribe(onNext: { [weak self] (vm) in
+            self?.currentMovieViewModel = vm
+            self?.performSegue(withIdentifier: PopularViewController.showMovieSegueId, sender: self)
+            }, onError: nil, onCompleted: nil, onDisposed: nil)
+            .disposed(by: disposeBag)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == PopularViewController.showMovieSegueId {
+            let controller = segue.destination as! MovieViewController
+            controller.viewModel = self.currentMovieViewModel
+            controller.network = self.network
+        }
     }
 }
 

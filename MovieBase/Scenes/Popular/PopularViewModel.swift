@@ -19,6 +19,7 @@ final class PopularViewModel: ViewModel {
     struct Output {
         let fetching: Driver<Bool>
         let movies: Variable<[MovieSectionModel]>
+        let showMovie: Observable<MovieViewModel>
     }
     
     private let network: Networking
@@ -56,7 +57,11 @@ final class PopularViewModel: ViewModel {
         
         let fetching = activityIndicator.asDriver()
         
-        return Output(fetching: fetching, movies: movies)
+        let showMovie = input.cellWasSelected.asObservable().map { [weak self] (ip) -> MovieViewModel in
+            MovieViewModel(movie: movies.value[0].data[ip.row], network: self?.network ?? Network())
+        }
+        
+        return Output(fetching: fetching, movies: movies, showMovie: showMovie)
     }
 }
 

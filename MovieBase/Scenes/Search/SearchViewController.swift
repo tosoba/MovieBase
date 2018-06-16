@@ -12,6 +12,8 @@ import RxCocoa
 import RxDataSources
 
 class SearchViewController: UIViewController {
+    
+    private static let showMovieSegueId = "ShowSearchedMovieSegue"
 
     @IBOutlet weak var moviesSearchBar: UISearchBar!
     @IBOutlet weak var moviesTableView: UITableView!
@@ -19,6 +21,8 @@ class SearchViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     var viewModel: SearchViewModel!
+    private var currentMovieViewModel: MovieViewModel?
+    
     var network: Networking!
     
     override func viewDidLoad() {
@@ -27,7 +31,6 @@ class SearchViewController: UIViewController {
     }
 
     private func bindViewModel() {
-        
         let searchText = moviesSearchBar.rx.text.orEmpty
             .throttle(2.0, scheduler: MainScheduler.instance)
             .distinctUntilChanged()
@@ -50,5 +53,19 @@ class SearchViewController: UIViewController {
         let output = viewModel.transform(input: input)
         
         output.movies.asObservable().bind(to: moviesTableView.rx.items(dataSource: moviesDataSource)).disposed(by: disposeBag)
+        
+        output.showMovie.subscribe(onNext: { [weak self] (vm) in
+            self?.currentMovieViewModel = vm
+            self?.performSegue(withIdentifier: SearchViewController.showMovieSegueId, sender: self)
+            }, onError: nil, onCompleted: nil, onDisposed: nil)
+            .disposed(by: disposeBag)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == SearchViewController.showMovieSegueId {
+            let controller = segue.destination as! MovieViewController
+            controller.viewModel = self.currentMovieViewModel
+            controller.network = self.network
+        }
     }
 }
