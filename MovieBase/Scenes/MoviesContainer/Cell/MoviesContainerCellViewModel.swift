@@ -9,12 +9,12 @@
 import RxSwift
 import RxCocoa
 
-protocol PopularCellViewModeling {
+protocol MoviesContainerCellViewModeling {
     var posterImage: Observable<UIImage> { get }
     var title: String { get }
 }
 
-class PopularCellViewModel: PopularCellViewModeling {
+class MoviesContainerCellViewModel: MoviesContainerCellViewModeling {
     
     let posterImage: Observable<UIImage>
     let title: String

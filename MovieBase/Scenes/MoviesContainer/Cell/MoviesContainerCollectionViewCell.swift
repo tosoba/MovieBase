@@ -10,14 +10,14 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class PopularCollectionViewCell: UICollectionViewCell {
-    
-    @IBOutlet weak var posterImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
+class MoviesContainerCollectionViewCell: UICollectionViewCell {
     
     private var disposeBag: DisposeBag? = DisposeBag()
     
-    var viewModel: PopularCellViewModeling? {
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var posterImageView: UIImageView!
+    
+    var viewModel: MoviesContainerCellViewModeling? {
         didSet {
             let disposeBag = DisposeBag()
             

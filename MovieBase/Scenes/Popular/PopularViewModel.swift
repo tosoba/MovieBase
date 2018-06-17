@@ -16,10 +16,10 @@ final class PopularViewModel: ViewModel {
         let cellWasSelected: Driver<IndexPath>
     }
     
-    struct Output {
-        let fetching: Driver<Bool>
-        let movies: Variable<[MovieSectionModel]>
-        let showMovie: Observable<MovieViewModel>
+    struct Output: MoviesContainerInput {
+        var fetching: Driver<Bool>
+        var movies: Variable<[MovieSectionModel]>
+        var showMovie: Observable<MovieViewModel>
     }
     
     private let network: Networking
