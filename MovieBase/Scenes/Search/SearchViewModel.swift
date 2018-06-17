@@ -24,7 +24,7 @@ class SearchViewModel: ViewModel {
     }
     
     private let network: Networking
-    private let movieService: MovieServicing
+    private let movieService: APIMovieServicing
     
     private var lastQuery: String?
     
@@ -33,7 +33,7 @@ class SearchViewModel: ViewModel {
     private var currentPage = 1
     private var totalPages = 1
     
-    init(network: Networking, movieService: MovieServicing) {
+    init(network: Networking, movieService: APIMovieServicing) {
         self.network = network
         self.movieService = movieService
     }

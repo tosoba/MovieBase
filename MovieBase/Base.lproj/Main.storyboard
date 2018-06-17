@@ -24,18 +24,29 @@
                                     <segue destination="Q9O-jU-s5s" kind="embed" id="kkY-XN-pSg"/>
                                 </connections>
                             </containerView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No favourite movies added yet." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uZK-l8-gpV">
+                                <rect key="frame" x="10" y="74" width="355" height="534"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="26"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Cij-ue-U8e" firstAttribute="leading" secondItem="Qel-AU-W7d" secondAttribute="leading" id="B05-r6-5F4"/>
+                            <constraint firstItem="uZK-l8-gpV" firstAttribute="bottom" secondItem="Qel-AU-W7d" secondAttribute="bottom" constant="-10" id="Gxx-Tt-WeW"/>
                             <constraint firstItem="Qel-AU-W7d" firstAttribute="trailing" secondItem="Cij-ue-U8e" secondAttribute="trailing" id="N1r-OK-glr"/>
+                            <constraint firstItem="uZK-l8-gpV" firstAttribute="leading" secondItem="Qel-AU-W7d" secondAttribute="leading" constant="10" id="UiW-jL-e87"/>
                             <constraint firstItem="Qel-AU-W7d" firstAttribute="bottom" secondItem="Cij-ue-U8e" secondAttribute="bottom" id="YAm-0b-x65"/>
+                            <constraint firstItem="uZK-l8-gpV" firstAttribute="top" secondItem="Qel-AU-W7d" secondAttribute="top" constant="10" id="l7r-6S-dXh"/>
+                            <constraint firstItem="uZK-l8-gpV" firstAttribute="trailing" secondItem="Qel-AU-W7d" secondAttribute="trailing" constant="-10" id="rxc-mG-Kmj"/>
                             <constraint firstItem="Cij-ue-U8e" firstAttribute="top" secondItem="Qel-AU-W7d" secondAttribute="top" id="zww-gx-bkc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Qel-AU-W7d"/>
                     </view>
                     <navigationItem key="navigationItem" title="Favourites" id="mz6-5Y-od3"/>
                     <connections>
+                        <outlet property="noFavouritesLabel" destination="uZK-l8-gpV" id="aiT-py-0Ku"/>
                         <segue destination="uBN-kp-wFS" kind="show" identifier="ShowFavouriteMovieSegue" id="AnA-uO-LLL"/>
                     </connections>
                 </viewController>
@@ -165,7 +176,11 @@
                         <viewLayoutGuide key="safeArea" id="CGw-ps-fcZ"/>
                     </view>
                     <toolbarItems>
-                        <barButtonItem image="favourite" id="1aL-G5-24D"/>
+                        <barButtonItem image="favourite" id="1aL-G5-24D">
+                            <connections>
+                                <action selector="toggleFavourite:" destination="uBN-kp-wFS" id="pdn-G1-5Fx"/>
+                            </connections>
+                        </barButtonItem>
                     </toolbarItems>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -326,7 +341,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="130"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9ev-6Q-rYT" id="D2h-VB-3Dq">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="129.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="130"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MOi-g3-jbp">
@@ -504,7 +519,7 @@
         <image name="star" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NJw-i5-oQH"/>
-        <segue reference="0GO-aL-lrn"/>
+        <segue reference="kkY-XN-pSg"/>
+        <segue reference="AnA-uO-LLL"/>
     </inferredMetricsTieBreakers>
 </document>

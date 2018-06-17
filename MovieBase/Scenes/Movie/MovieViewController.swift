@@ -25,18 +25,44 @@ class MovieViewController: UIViewController {
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var overviewText: UITextView!
     
+    @IBAction func toggleFavourite(_ sender: UIBarButtonItem) {
+        if viewModel.movieAddedToFavourites {
+            viewModel.removeFromFavourites()
+            addToFavouritesButton.image = #imageLiteral(resourceName: "favourite")
+        } else {
+            viewModel.addToFavourites()
+            addToFavouritesButton.image = #imageLiteral(resourceName: "remove")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItem = addToFavouritesButton
+        configureFavouriteBtn()
         bindViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setFavouriteBtnIcon()
+    }
+    
+    private func configureFavouriteBtn() {
+        navigationItem.rightBarButtonItem = addToFavouritesButton
+    }
+    
+    private func setFavouriteBtnIcon() {
+        if viewModel.movieAddedToFavourites {
+            addToFavouritesButton.image = #imageLiteral(resourceName: "remove")
+        } else {
+            addToFavouritesButton.image = #imageLiteral(resourceName: "favourite")
+        }
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         let sizeFittingTextView = overviewText.sizeThatFits(CGSize(width: overviewText.frame.size.width, height: CGFloat(MAXFLOAT)))
         overviewText.heightAnchor.constraint(equalToConstant: sizeFittingTextView.height)
-
     }
     
     private func bindViewModel() {

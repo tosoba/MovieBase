@@ -8,6 +8,8 @@
 
 import Himotoki
 import RxDataSources
+import CoreData
+import RxCoreData
 
 struct Movie {
     let posterPath: String?
@@ -22,6 +24,10 @@ struct Movie {
     let popularity: Double
     let voteCount: Int
     let voteAverage: Double
+    
+    var genreIdsString: String {
+        return genreIds.map { String($0) }.joined(separator: ",")
+    }
 }
 
 extension Movie: Himotoki.Decodable {
@@ -50,9 +56,59 @@ extension Movie: Equatable {
 }
 
 extension Movie: IdentifiableType {
-    var identity: Int {
-        return id
+    var identity: String {
+        return String(id)
     }
     
-    typealias Identity = Int
+    typealias Identity = String
 }
+
+extension Movie: Persistable {
+    
+    typealias T = NSManagedObject
+    
+    static var entityName: String {
+        return "Movie"
+    }
+    
+    static var primaryAttributeName: String {
+        return "id"
+    }
+    
+    init(entity: NSManagedObject) {
+        posterPath = entity.value(forKey: "posterPath") as? String
+        adult = entity.value(forKey: "adult") as! Bool
+        overview = entity.value(forKey: "overview") as! String
+        releaseDate = entity.value(forKey: "releaseDate") as! String
+        genreIds = (entity.value(forKey: "genreIds") as! String).split(separator: ",").map { Int($0)! }
+        id = entity.value(forKey: "id") as! Int
+        originalTitle = entity.value(forKey: "originalTitle") as! String
+        originalLanguage = entity.value(forKey: "originalLanguage") as! String
+        title = entity.value(forKey: "title") as! String
+        popularity = entity.value(forKey: "popularity") as! Double
+        voteCount = entity.value(forKey: "voteCount") as! Int
+        voteAverage = entity.value(forKey: "voteAverage") as! Double
+    }
+    
+    func update(_ entity: NSManagedObject) {
+        entity.setValue(posterPath, forKey: "posterPath")
+        entity.setValue(adult, forKey: "adult")
+        entity.setValue(overview, forKey: "overview")
+        entity.setValue(releaseDate, forKey: "releaseDate")
+        entity.setValue(genreIdsString, forKey: "genreIds")
+        entity.setValue(id, forKey: "id")
+        entity.setValue(originalTitle, forKey: "originalTitle")
+        entity.setValue(originalLanguage, forKey: "originalLanguage")
+        entity.setValue(title, forKey: "title")
+        entity.setValue(popularity, forKey: "popularity")
+        entity.setValue(voteCount, forKey: "voteCount")
+        entity.setValue(voteAverage, forKey: "voteAverage")
+        
+        do {
+            try entity.managedObjectContext?.save()
+        } catch let e {
+            print(e)
+        }
+    }
+}
+

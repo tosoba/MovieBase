@@ -23,11 +23,11 @@ final class PopularViewModel: ViewModel {
     }
     
     private let network: Networking
-    private let movieService: MovieServicing
+    private let movieService: APIMovieServicing
 
     private let disposeBag = DisposeBag()
     
-    init(network: Networking, movieService: MovieServicing) {
+    init(network: Networking, movieService: APIMovieServicing) {
         self.network = network
         self.movieService = movieService
     }

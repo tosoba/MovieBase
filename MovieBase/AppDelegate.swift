@@ -25,23 +25,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             container.register(Networking.self) { _ in
                 Network()
             }
-            container.register(MovieServicing.self) { r in
-                MovieService(network: r.resolve(Networking.self)!)
+            container.register(APIMovieServicing.self) { r in
+                APIMovieService(network: r.resolve(Networking.self)!)
             }
             
             // ViewModel
             container.register(PopularViewModel.self) { r in
                 PopularViewModel(
                     network: r.resolve(Networking.self)!,
-                    movieService: r.resolve(MovieServicing.self)!
+                    movieService: r.resolve(APIMovieServicing.self)!
                 )
             }
             
             container.register(SearchViewModel.self) { r in
                 SearchViewModel(
                     network: r.resolve(Networking.self)!,
-                    movieService: r.resolve(MovieServicing.self)!
+                    movieService: r.resolve(APIMovieServicing.self)!
                 )
+            }
+            
+            container.register(FavouriteViewModel.self) { r in
+                FavouriteViewModel(network: r.resolve(Networking.self)!)
             }
             
             // Views
@@ -53,7 +57,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 c.network = r.resolve(Networking.self)!
             }
             
-            container.storyboardInitCompleted(FavouritesViewController.self) { r, c in }
+            container.storyboardInitCompleted(FavouritesViewController.self) { r, c in
+                c.viewModel = r.resolve(FavouriteViewModel.self)
+                c.network = r.resolve(Networking.self)!
+            }
+            
             container.storyboardInitCompleted(PopularViewController.self) { r, c in
                 c.viewModel = r.resolve(PopularViewModel.self)
                 c.network = r.resolve(Networking.self)!

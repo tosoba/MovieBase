@@ -14,8 +14,6 @@ import RxDataSources
 class PopularViewController: UIViewController, MoviesContainerParent {
     var moviesContainerVC: MoviesContainerViewController?
     
-    private static let showMovieSegueId = "ShowPopularMovieSegue"
-    
     private let disposeBag = DisposeBag()
     
     var viewModel: PopularViewModel!
@@ -28,6 +26,8 @@ class PopularViewController: UIViewController, MoviesContainerParent {
         let output = viewModel.transform(input: input)
         moviesContainerVC?.bind(input: output)
     }
+    
+    private static let showMovieSegueId = "ShowPopularMovieSegue"
     
     func showMovieVC(viewModel: MovieViewModel) {
         self.currentMovieViewModel = viewModel

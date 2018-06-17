@@ -9,6 +9,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import CoreData
 
 final class MovieViewModel: ViewModel {
     struct Input {
@@ -26,6 +27,37 @@ final class MovieViewModel: ViewModel {
     init(movie: Movie, network: Networking) {
         self.movie = movie
         self.network = network
+    }
+    
+    var movieAddedToFavourites: Bool {
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Movie")
+        fetchRequest.predicate = NSPredicate(format: "id = %d", movie.id)
+        
+        var results: [NSManagedObject] = []
+        
+        do {
+            results = try persistentContainer.viewContext.fetch(fetchRequest)
+        } catch {
+            print("error executing fetch request: \(error)")
+        }
+        
+        return results.count > 0
+    }
+    
+    func removeFromFavourites() {
+        do {
+            try persistentContainer.viewContext.rx.delete(movie)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func addToFavourites() {
+        do {
+            try persistentContainer.viewContext.rx.update(movie)
+        } catch {
+            print(error)
+        }
     }
     
     func transform(input: MovieViewModel.Input) -> MovieViewModel.Output {

@@ -27,12 +27,12 @@ enum MovieAPI {
     }
 }
 
-protocol MovieServicing {
+protocol APIMovieServicing {
     func getPopular(fromPage page: Int) -> Observable<MovieSearch>
     func search(query: String, fromPage page: Int) -> Observable<MovieSearch>
 }
 
-class MovieService: MovieServicing {
+class APIMovieService: APIMovieServicing {
     private let network: Networking
     
     init(network: Networking) {
