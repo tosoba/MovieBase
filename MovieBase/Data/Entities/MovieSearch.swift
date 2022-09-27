@@ -19,7 +19,7 @@ extension MovieSearch: Himotoki.Decodable {
     static func decode(_ e: Extractor) throws -> MovieSearch {
         return try MovieSearch(
             page: e <| "page",
-            results: e <|| "results",
+            results: e <| "results",
             totalResults: e <| "total_results",
             totalPages: e <| "total_pages"
         )

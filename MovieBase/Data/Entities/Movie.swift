@@ -37,7 +37,7 @@ extension Movie: Himotoki.Decodable {
             adult: e <| "adult",
             overview: e <| "overview",
             releaseDate: e <| "release_date",
-            genreIds: e <|| "genre_ids",
+            genreIds: e <| "genre_ids",
             id: e <| "id",
             originalTitle: e <| "original_title",
             originalLanguage: e <| "original_language",

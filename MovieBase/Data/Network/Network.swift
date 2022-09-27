@@ -31,7 +31,7 @@ final class Network: Networking {
         return Observable.create { observer in
             let method = method.httpMethod()
             
-            let request = Alamofire.request(url, method: method, parameters: parameters)
+            let request = AF.request(url, method: method, parameters: parameters)
                 .validate()
                 .responseJSON(queue: self.queue) { response in
                     switch response.result {
@@ -50,9 +50,9 @@ final class Network: Networking {
     
     func image(url: String) -> Observable<UIImage> {
         return Observable.create { observer in
-            let request = Alamofire.request(url, method: .get)
+            let request = AF.request(url, method: .get)
                 .validate()
-                .response(queue: self.queue, responseSerializer: Alamofire.DataRequest.dataResponseSerializer()) { response in
+                .response(queue: self.queue, responseSerializer: DataResponseSerializer()) { response in
                     switch response.result {
                     case .success(let data):
                         guard let image = UIImage(data: data) else {
